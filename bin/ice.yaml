@@ -1,0 +1,92 @@
+%YAML:1.0
+
+#############################################################################################
+# 
+# 需要配置的参数:
+# 
+#############################################################################################
+
+#--------------------------------------------------------------------------------------------
+# image_path:           The folder containing l and r folders, and the calib.yaml
+# start_id:             The image index of the first detection (from 0)
+# end_id:               The image index of the last detection
+# iba_param_path:       iba parameters path
+# gba_camera_save_path: Save the camera states to when finished
+#--------------------------------------------------------------------------------------------
+SLAM.image_path: /media/jianc/database/dataset_cj/vio/imgdir/
+SLAM.imu_path: /media/jianc/database/dataset_cj/vio/listdir/imulist_radmin.txt.bei
+SLAM.start_id: 2000
+SLAM.end_id: 5000
+SLAM.iba_param_path: ../config/param.txt
+SLAM.gba_camera_save_path: ./save/
+#--------------------------------------------------------------------------------------------
+# grid_row_num:                 Number of rows of detection grids
+# grid_row_num:                 Number of cols of detection grids
+# max_num_per_grid:             Max number of points per grid   
+# feat_quality:                 Tomasi-Shi feature quality level 
+# feat_min_dis:                 Tomasi-Shi feature minimal distance
+# not_use_fast:                 Whether or not use FAST
+# pyra_level:                   Total pyramid levels
+# uniform_radius:               < 5 disables uniformaty enforcement
+# ft_len:                       The feature track length threshold when dropout kicks in
+# ft_droprate:                  The drop out rate when a feature track exceeds ft_len
+# show_feat_only:               wether or not show detection results only
+# fast_thresh:                  FAST feature threshold (only meaningful if use_fast=true)
+# min_feature_distance_over_baseline_ratio:     Used for slave image feature detection
+# max_feature_distance_over_baseline_ratio:     Used for slave image feature detection
+#--------------------------------------------------------------------------------------------
+FEATURE.grid_row_num: 1
+FEATURE.grid_col_num: 1
+FEATURE.max_num_per_grid: 200
+FEATURE.feat_quality: 0.07
+FEATURE.feat_min_dis: 10
+FEATURE.not_use_fast: 0
+FEATURE.pyra_level: 2
+FEATURE.uniform_radius: 40
+FEATURE.ft_len: 125
+FEATURE.ft_droprate: 0.05
+FEATURE.show_feat_only: 0
+FEATURE.fast_thresh: 10
+FEATURE.min_feature_distance_over_baseline_ratio: 4
+FEATURE.max_feature_distance_over_baseline_ratio: 3000
+
+time_shift: 1526010000.0
+
+
+#############################################################################################
+# 
+# CAMERA
+# 
+#############################################################################################
+
+
+CAMERA.image_width: 1280
+CAMERA.image_height: 720
+CAMERA.intrinsics.K: !!opencv-matrix
+    rows: 3
+    cols: 3
+    dt: f
+    data: [793.88823403, 0.0, 604.36116913,
+            0.0,    792.52058410, 374.73307786,
+            0.0,    0.0,    1.0]
+CAMERA.intrinsics.D: !!opencv-matrix
+    rows: 4
+    cols: 1
+    dt: f
+    data: [-0.05620386, -0.01322927, -0.00034181, 0.00058843]
+
+CAMERA.extrinsicRotation: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 9.9871196871443468e-01, 2.8558576171274851e-02,
+       -4.1938183956955977e-02, 4.2538368250040336e-02,
+       -2.0742840378161098e-02, 9.9887948312079666e-01,
+       2.7656658749059829e-02, -9.9937687700892675e-01,
+       -2.1930958180673032e-02 ]
+CAMERA.extrinsicTranslation: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ 4.4940502704758800e-02, 8.3498950824823870e-01,
+       8.8960671312008011e-01 ]

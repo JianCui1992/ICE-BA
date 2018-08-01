@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
+set(VTRACKER_DIR /home/jianc/uos_stable)
 
 # Cross Compile
 if ("$ENV{CROSS_COMPILE_FLAG}" STREQUAL "XU4")
@@ -9,6 +10,18 @@ if ("$ENV{CROSS_COMPILE_FLAG}" STREQUAL "XU4")
   SET(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
   SET(CMAKE_BUILD_TYPE Release)
 endif()
+
+#eigen
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/eigen3/include)
+#boost
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/boost/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_depend/boost/16.04/lib)
+set(BOOST_LIBS boost_system boost_filesystem boost_thread)
+
+#ceres 
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/carto/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_depend/carto/16.04/lib)
+set(CERES_LIBS protobuf glog webp lua5.2 gomp lapack f77blas atlas cholmod spqr cxsparse)
 
 # If on OSX, force cmake to use gcc-6/5 instead of the built-in gcc (AppleClang)
 # The compiler overriden has to happen before calling "project"
@@ -67,17 +80,15 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
 find_package(CVD)
-find_package(Boost COMPONENTS thread system filesystem REQUIRED)
-find_package(Eigen REQUIRED)
-if (CVD_FOUND)
- add_definitions(-DIBA_WITH_CVD)
- find_package(OpenGL REQUIRED)
- find_package(GLUT REQUIRED)
- find_package(GLEW REQUIRED)
- if (UNIX)
-  find_package(X11 REQUIRED)
- endif()
-endif()
+#if (CVD_FOUND)
+ #add_definitions(-DIBA_WITH_CVD)
+ #find_package(OpenGL REQUIRED)
+ #find_package(GLUT REQUIRED)
+ #find_package(GLEW REQUIRED)
+ #if (UNIX)
+  #find_package(X11 REQUIRED)
+ #endif()
+#endif()
 
 # =========================
 # Frontend

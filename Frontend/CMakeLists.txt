@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(euroc_tracking)
 
+set(VTRACKER_DIR /home/jianc/uos_stable)
+
 list(FIND OpenCV_LIBS "opencv_viz" find_index)
 if (find_index GREATER -1)
     message(STATUS "Found opencv_viz")
@@ -9,9 +11,15 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake)
 
-find_package(Glog REQUIRED)
-find_package(GFlags REQUIRED)
-find_package(OpenCV REQUIRED)
+#ceres 
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/carto/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_depend/carto/16.04/lib)
+set(CERES_LIBS protobuf glog webp lua5.2 gomp lapack f77blas atlas cholmod spqr cxsparse)
+#opencv
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_3rdparty/opencv33/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_3rdparty/opencv33/16.04/lib)
+set(OpenCV_LIBS opencv_core opencv_highgui opencv_calib3d opencv_features2d opencv_imgproc opencv_imgcodecs opencv_video)
+
 find_package(Yaml REQUIRED)
 
 #include_directories (${GLOG_INCLUDE_DIR})
@@ -66,16 +74,14 @@ add_library(OF SHARED
     ${SOURCES}
 )
 target_include_directories(OF PUBLIC
-    ${GFLAGS_INCLUDE_DIR}
-    ${OpenCV_INCLUDE_DIR}
     ${YAMLCPP_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/cameras
 )
 target_link_libraries(OF
-    ${GFLAGS_LIBRARIES}
     ${OpenCV_LIBS}
     ${YAMLCPP_LIBRARIES}
     IBA
     glog
+    gflags
 )

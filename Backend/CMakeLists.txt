@@ -1,5 +1,21 @@
 cmake_minimum_required(VERSION 2.8.11)
 
+set(VTRACKER_DIR /home/jianc/uos_stable)
+
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/eigen3/include)
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_3rdparty/opencv33/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_3rdparty/opencv33/16.04/lib)
+set(OpenCV_LIBS opencv_core opencv_highgui opencv_calib3d opencv_features2d opencv_imgproc opencv_imgcodecs opencv_video)
+#ceres 
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/carto/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_depend/carto/16.04/lib)
+set(CERES_LIBS protobuf glog webp lua5.2 gomp lapack f77blas atlas cholmod spqr cxsparse)
+
+#boost
+include_directories(SYSTEM ${VTRACKER_DIR}/src/uos_depend/boost/16.04/include)
+link_directories(${VTRACKER_DIR}/src/uos_depend/boost/16.04/lib)
+set(BOOST_LIBS boost_system boost_filesystem boost_thread)
+
 # Cross Compile
 if ("$ENV{CROSS_COMPILE_FLAG}" STREQUAL "XU4")
   message("Cross Compile For XU4")
@@ -66,19 +82,16 @@ set(CMAKE_BUILD_TYPE Release)
 # If CFG_VIEW is turned on, need to install glut (freeglut3-dev) and glew (libglew-dev)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
-find_package(CVD)
-find_package(Boost COMPONENTS thread system filesystem REQUIRED)
-find_package(Eigen REQUIRED)
-find_package(Glog REQUIRED)
-if (CVD_FOUND)
- add_definitions(-DIBA_WITH_CVD)
- find_package(OpenGL REQUIRED)
- find_package(GLUT REQUIRED)
- find_package(GLEW REQUIRED)
- if (UNIX)
-  find_package(X11 REQUIRED)
- endif()
-endif()
+#find_package(CVD)
+#if (CVD_FOUND)
+ #add_definitions(-DIBA_WITH_CVD)
+ #find_package(OpenGL REQUIRED)
+ #find_package(GLUT REQUIRED)
+ #find_package(GLEW REQUIRED)
+ #if (UNIX)
+  #find_package(X11 REQUIRED)
+ #endif()
+#endif()
 
 # Explicitly specify all header and source files
 # =========================
@@ -245,13 +258,9 @@ add_library(IBA SHARED
 target_include_directories(IBA PUBLIC
  ${IBA_INCLUDE_DIRS}
  ${CMAKE_CURRENT_SOURCE_DIR}
- ${EIGEN_INCLUDE_DIR}
- ${Boost_INCLUDE_DIR}
- ${GLOG_INCLUDE_DIRS}
 )
 target_link_libraries(IBA
- ${Boost_LIBRARIES}
- ${GLOG_LIBRARIES}
+ ${BOOST_LIBS}
  ${X11_LIBRARIES}
  pthread
 )
